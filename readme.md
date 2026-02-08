@@ -1,12 +1,21 @@
 # Auto Email Base
 
-## Быстрый старт
+## Быстрый старт (macOS / Linux)
 
 ```bash
-cd /Users/nikolay.bulgakov/Documents/Work/new-base/old/bf_v2
+git clone https://github.com/Brokenbass90/email-base.git
+cd email-base
 nvm use
 npm i
 chmod +x ./mail
+```
+
+## Быстрый старт (Windows)
+
+```bash
+git clone https://github.com/Brokenbass90/email-base.git
+cd email-base
+npm i
 ```
 
 ## Основные команды
@@ -22,6 +31,14 @@ chmod +x ./mail
 - `build-min` — minify head (по умолчанию)
 - `build-pretty` — без минификации, + `index.pretty.html`
 - `clean` — удаляет `dist/` (в git не попадает)
+
+### Windows команды (если `./mail` не работает)
+
+```bash
+node mail dev X_IQ rfm-311
+node mail build-min X_IQ rfm-311
+node mail build-pretty X_IQ rfm-311
+```
 
 ## Где результат
 
