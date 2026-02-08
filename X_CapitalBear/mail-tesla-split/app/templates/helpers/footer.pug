@@ -1,0 +1,13 @@
+table.row.footer
+    tr
+        td.pt50.wrapper.last.offset-by-one
+            table.ten.columns
+                tr
+                    td.pb50.text-pad-small
+                        p.address-text.pb20 {{embedded.company_address}}
+                        p.warning
+                            strong ${{ footer.footer.warn }}$
+                            | &ensp;${{ footer.new.standart }}$
+                        p.subscribe
+                            a.left(href="https://capitalbear.com/terms.html" target="_blank")  ${{ footer.footer.conditions }}$
+                            a.right(href="https://capitalbear.com/api/mail/unsubscribe?t={{embedded.unsubscribe_token}}")  ${{ footer.footer.unsubscribe }}$

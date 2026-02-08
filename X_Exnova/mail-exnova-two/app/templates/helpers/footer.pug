@@ -1,0 +1,13 @@
+ 
+table.w100.max-w100(align="center")
+    tr
+        td.pb30.text-pad-small(align="center")
+            table.w100.max-w480
+                tr 
+                    td(align="left")
+                        p.address-text.pt20 {{embedded.company_address}}
+                        p.warning.pb20 {{embedded.risk_warning}}
+                        a.terms(href='https://exnova.com/terms/terms-conditions' target="_blank") ${{ footer.footer.conditions }}$
+                        a.terms(href='{{embedded.unsubscribe_link}}' target="_blank")  ${{ footer.footer.unsubscribe }}$
+
+

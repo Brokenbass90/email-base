@@ -1,0 +1,49 @@
+table.row.header
+    tr
+        td.wrapper.offset-by-one.last.pt40
+            table.ten.columns
+                tr
+                    td.pb40
+                        a(href="{{embedded.domain}}/traderoom/?aff=7&afftrack=mail&retrack=system" target="_blank")
+                            img.logo(src="https://static.cdnpub.info/files/storage/public/5f/ad/4a6bec6d95c0c0h5j4/logo.png")
+                tr
+                    td.text-pad-small.pb40
+                        p.title ${{ transaction-review.block_00 }}$
+
+table.row.grey-bg
+    tr
+        td.wrapper.last.offset-by-one.pt0
+            table.ten.columns
+                tr
+                    td.text-pad-small.pb15
+
+table.row.white-bg.bb.brad-top
+    tr
+        td.wrapper.last.offset-by-one.pt35
+            table.ten.columns
+                tr
+                    td.text-pad-small.pb40
+                        p.text.pb10
+                            strong ${{ transaction-review.block_01 }}$
+                        p.text.pb10 ${{ transaction-review.block_02 }}$&ensp;
+                            strong {{transaction_id}}
+                            | &ensp;${{ transaction-review.block_03 }}$
+                        p.text.pb0 ${{ transaction-review.block_04 }}$
+
+table.row.grey-bg
+    tr
+        td.wrapper.last.offset-by-one.pt0
+            table.ten.columns
+                tr
+                    td.text-pad-small.pb5
+
+table.row.white-bg.brad-bot
+    tr
+        td.wrapper.last.offset-by-two.pt30
+            table.eight.columns
+                tr
+                    td.text-pad-small.pb30
+                        p.small-text.center ${{ transaction-review.block_05 }}$&ensp;
+                            a(href="mailto:{{embedded.company_email}}" target="_blank") ${{ transaction-review.block_06 }}$
+                            | &ensp;${{ transaction-review.block_07 }}$
+

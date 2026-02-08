@@ -1,0 +1,40 @@
+table.row.header
+    tr
+        td.wrapper.offset-by-one.last.pt0
+            table.ten.columns
+                tr
+                    td.six.sub-columns.pb25
+                        a(href="{{embedded.domain}}/traderoom/asset?aff=7&afftrack=mail_system&retrack=system" target="_blank")
+                            img.logo(src="https://static.cdnroute.io/files/storage/public/61/0c/030b94f6e9a4a6d3a6/logo.png")
+                    td.six.sub-columns.last.pb25
+
+
+table.row.white-bg.brad-top
+    tr
+        td.wrapper.last.offset-by-one.pt30
+            table.ten.columns.bb
+                tr
+                    td.text-pad-small.pb30
+                        p.title.pb20 Your QCM trading account has been closed
+                        p.text.pb10
+                            strong Dear trader,
+                        p.text.pb30 Further to our previous emails regarding the verification of your trading account \#{{user_id}}, we must regretfully inform you that&ensp;
+                            strong your account has been closed
+                            | &ensp;in line with our&ensp;
+                            a(href="{{embedded.company_terms_link}}" target="_blank") terms and conditions
+                            | &ensp;because you have failed to update and/or complete the requested information regarding your personal information.
+                        .grey-block
+                            p.text.pb20 Your account has not been fully verified for KYC and AML purposes and as such, it is our obligation to close your account with us.
+                            p.text
+                                strong You are now unable to login or access your trading account \#{{user_id}}.
+                        p.text.pt30 In case you wish to continue trading with {{embedded.brand_name}} you should open a new account.
+
+table.row.white-bg.brad-bot
+    tr
+        td.wrapper.last.offset-by-one.pt30
+            table.ten.columns
+                tr
+                    td.text-pad-small.pb30
+                        p.small-text.center ${{ KYC-account-closed-two.block_11 }}$&nbsp;
+                            a(href="mailto:{{embedded.company_email}}" target="_blank") ${{ KYC-account-closed-two.block_12 }}$
+                            | &nbsp;${{ KYC-account-closed-two.block_13 }}$
