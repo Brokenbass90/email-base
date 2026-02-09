@@ -8,18 +8,11 @@
   },
   "scripts": {
     "mail": "node ./mail",
-    "b": "node tools/build-mail.js",
-    "d": "node tools/dev.js",
     "build": "node tools/build-mail.js",
-    "build:example": "node tools/build-mail.js --category X_IQ --mail roll-300126",
-    "gulp": "gulp build",
     "serve": "node tools/serve-dist.js",
-    "build:one": "node tools/build-mail.js",
     "dev": "node tools/dev.js",
     "dev:rfm": "node tools/dev.js --category X_IQ --mail rfm-311 --port 3001",
-    "dev:roll": "node tools/dev.js --category X_IQ --mail roll-300126 --port 3001",
-    "dev:rfm:en": "node tools/dev.js --category X_IQ --mail rfm-311 --locales en --port 3001",
-    "dev:roll:en": "node tools/dev.js --category X_IQ --mail roll-300126 --locales en --port 3001"
+    "build:rfm": "node tools/build-mail.js --category X_IQ --mail rfm-311"
   },
   "devDependencies": {
     "csso": "^5.0.5",
