@@ -212,6 +212,27 @@ mixin person-right-text(photo,name,position,link, bottom_text)
                     td
                         p.text #{bottom_text}
 
+//- VML background helper (Outlook)
+//- Usage:
+//-   +vml-bg('https://img.jpg', '#101314', 580, 200)
+//-     //- your content
+mixin vml-bg(imageUrl, bgColor, width, height)
+    //- Outer wrapper with CSS background for non-Outlook clients
+    table(width=width, cellpadding="0", cellspacing="0", border="0", style=`width:${width}px; background:${bgColor}; background-image:url('${imageUrl}'); background-repeat:no-repeat; background-position:center; background-size:cover;`)
+        tr
+            td(style=`width:${width}px; height:${height}px;`)
+                //- Outlook VML background
+                | <!--[if gte mso 9]>
+                | <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:${width}px;height:${height}px;">
+                | <v:fill type="frame" src="${imageUrl}" color="${bgColor}" />
+                | <v:textbox inset="0,0,0,0">
+                | <![endif]-->
+                block
+                | <!--[if gte mso 9]>
+                | </v:textbox>
+                | </v:rect>
+                | <![endif]-->
+
 
 
 
