@@ -7,9 +7,9 @@
  * 2) Split CSS into:
  *    - inlineCss  (regular rules)
  *    - headCss    (@media/@supports/@font-face/@keyframes ...)
- * 3) Render Pug template -> HTML (injecting headCss into vendor/helpers/head.jade)
+ * 3) Render Pug template -> HTML (injecting headCss into vendor/helpers/head.pug)
  * 4) Inline inlineCss into HTML (without touching headCss)
- * 5) Localize placeholders (${...}) using JSON from vendor/data/<locale>
+ * 5) Localize placeholders (${{ ... }}$) using JSON from vendor/data/<locale>
  */
 
 const path = require('path');
@@ -24,6 +24,7 @@ const csso = require('csso');
 const { html: beautify } = require('js-beautify');
 
 const DEFAULT_LANG_DIR = path.join('vendor', 'data');
+const LOCALE_DIR_RE = /^[A-Za-z]{2}([_-][A-Za-z]{2})?$/;
 
 function die(msg, code = 1) {
   console.error(`\n[build] ${msg}\n`);
@@ -97,7 +98,10 @@ function parseLocalesArg(localesArg) {
 async function listLocales(langDirAbs) {
   if (!(await fs.pathExists(langDirAbs))) return [];
   const entries = await fs.readdir(langDirAbs, { withFileTypes: true });
-  return entries.filter((e) => e.isDirectory()).map((e) => e.name);
+  return entries
+    .filter((e) => e.isDirectory() && LOCALE_DIR_RE.test(e.name))
+    .map((e) => e.name)
+    .sort();
 }
 
 function compileStylus(stylPathAbs, includePathsAbs = [], autoImportsAbs = []) {
@@ -307,6 +311,30 @@ function localizeHtmlPlaceholders(html, translationIndex, { failOnMissing = fals
   });
 }
 
+function findUnresolvedLocalizationTokens(html) {
+  if (!html) return [];
+  const matches = html.match(/\$\{\{\s*[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_.-]+)?\s*\}\}\$/g) || [];
+  return [...new Set(matches)];
+}
+
+function formatTokenPreview(tokens, limit = 5) {
+  if (!tokens.length) return '';
+  if (tokens.length <= limit) return tokens.join(', ');
+  return `${tokens.slice(0, limit).join(', ')}, ...`;
+}
+
+async function pruneStaleLocaleDirs(distRoot, locales) {
+  if (!(await fs.pathExists(distRoot))) return;
+  const keep = new Set(locales);
+  const entries = await fs.readdir(distRoot, { withFileTypes: true });
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    if (!LOCALE_DIR_RE.test(entry.name)) continue;
+    if (keep.has(entry.name)) continue;
+    await fs.remove(path.join(distRoot, entry.name));
+  }
+}
+
 async function inlineHtml(html, inlineCssText) {
   // Do NOT touch <head> style tag with media queries.
   return inlineCss(html, {
@@ -352,6 +380,8 @@ async function writeHtmlPair(dirAbs, htmlCompact, htmlPretty, { emitPretty = fal
   // 2) pretty (as-for-development/review)
   if (emitPretty) {
     await fs.writeFile(path.join(dirAbs, 'index.pretty.html'), beautifyHtml(htmlPretty), 'utf8');
+  } else {
+    await fs.remove(path.join(dirAbs, 'index.pretty.html'));
   }
 }
 
@@ -431,7 +461,7 @@ async function writeHtmlPair(dirAbs, htmlCompact, htmlPretty, { emitPretty = fal
       let chunk = await compileStylus(entry, includePaths, autoImports);
       if (chunk && chunk.trim()) headOnlyRaw += (headOnlyRaw ? '\n' : '') + chunk;
     } catch (e) {
-      console.warn(`[build] WARN: ${path.basename(entry)} failed: ${e.message || e}`);
+      die(`Head-only Stylus compile failed (${path.relative(projectRoot, entry)}): ${e.message || e}`);
     }
   }
 
@@ -448,7 +478,7 @@ async function writeHtmlPair(dirAbs, htmlCompact, htmlPretty, { emitPretty = fal
       let chunk = await compileStylus(entry, includePaths, autoImports);
       if (chunk && chunk.trim()) headExtraRaw += (headExtraRaw ? '\n' : '') + chunk;
     } catch (e) {
-      console.warn(`[build] WARN: ${path.basename(entry)} failed: ${e.message || e}`);
+      die(`Head-extra Stylus compile failed (${path.relative(projectRoot, entry)}): ${e.message || e}`);
     }
   }
 
@@ -560,6 +590,7 @@ async function writeHtmlPair(dirAbs, htmlCompact, htmlPretty, { emitPretty = fal
 
   const distRoot = path.join(projectRoot, argv.dist, category, `mail-${mail}`);
   await fs.ensureDir(distRoot);
+  await pruneStaleLocaleDirs(distRoot, locales);
 
   // 4) Write base (non-localized)
   let baseCompact = null;
@@ -570,7 +601,7 @@ async function writeHtmlPair(dirAbs, htmlCompact, htmlPretty, { emitPretty = fal
       minifyHead: argv.minifyCss || minifyAll,
       minifyInline: minifyAll,
       minifyHtml: argv.minifyHtml || minifyAll,
-      prettyHtml: true,
+      prettyHtml: false,
     });
     baseCompact = compactVariant.html;
     if (argv.pretty) {
@@ -599,7 +630,7 @@ async function writeHtmlPair(dirAbs, htmlCompact, htmlPretty, { emitPretty = fal
         minifyHead: argv.minifyCss || minifyAll,
         minifyInline: minifyAll,
         minifyHtml: argv.minifyHtml || minifyAll,
-        prettyHtml: true,
+        prettyHtml: false,
       });
       baseCompact = compactVariant.html;
     }
@@ -622,6 +653,14 @@ async function writeHtmlPair(dirAbs, htmlCompact, htmlPretty, { emitPretty = fal
       localized = localizeHtmlPlaceholders(localized, idx, { failOnMissing: argv.failOnMissing });
     } catch (e) {
       die(`Localization failed for locale '${locale}': ${e.message || e}`);
+    }
+    if (!argv.failOnMissing) {
+      const unresolved = findUnresolvedLocalizationTokens(localized);
+      if (unresolved.length) {
+        console.warn(
+          `[build] WARN locale '${locale}': ${unresolved.length} unresolved placeholder(s): ${formatTokenPreview(unresolved)}`
+        );
+      }
     }
     const localeDir = path.join(distRoot, locale);
     await fs.ensureDir(localeDir);

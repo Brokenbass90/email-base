@@ -56,6 +56,15 @@ dist/<CATEGORY>/mail-<MAIL>/<LOCALE>/index.html
 - `--minifyAll` — минимизировать HTML + head CSS + inline CSS
 - `--locales en,es` — собрать только выбранные локали
 
+## Как работают стили
+
+- `app/styles/common.styl` или `app/styles/inline.styl`
+  Основной файл. Обычные правила инлайнятся в HTML, а в `<head>` остаются только head-safe at-rules: `@media`, `@supports`, `@font-face`, `@keyframes`.
+- `app/styles/head-extra.styl`
+  Дополнительный файл. Его правила и инлайнятся, и целиком остаются в `<head>`.
+- `app/styles/head-only.styl`
+  Технический файл для редких случаев. Его правила остаются только в `<head>` и не инлайнятся.
+
 ## Как сделать новое письмо
 
 ```
