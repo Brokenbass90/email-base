@@ -39,6 +39,15 @@ table.row.brad-full.color-bg
                                     td.butt.butt-2.pb0
                                         a.butt-link-2(href="https://play.google.com/store/apps/details?id=iq.broker" universal="true" target="_blank") ${{ welcome-broker.block_05 }}$
 
+                        .h-24 &nbsp;
+                        p.demo-note Table-based CTA example
+                        +cta-two-column-table(
+                            'https://api.trade.iqbroker.com/v1/multi-links/open-asset?aff=7&afftrack=mail_welcome&retrack=mail_welcome',
+                            '${{ welcome-broker.block_04 }}$',
+                            'https://play.google.com/store/apps/details?id=iq.broker',
+                            '${{ welcome-broker.block_05 }}$'
+                        )
+
 .h-12 &nbsp;
 
 table.row.brad-full.color-bg(style="border: 4px solid #1A1D1E;")
@@ -74,6 +83,17 @@ table.row.brad-full.color-bg(style="border: 4px solid #1A1D1E;")
                                 tr
                                     td.butt.butt-small.pb0
                                         a.butt-link-middle(href="#" universal="true" target="_blank") ${{ welcome-broker.block_09 }}$
+
+                        .h-24 &nbsp;
+                        p.demo-note Table-based switch row example
+                        +cta-switch-table(
+                            '#',
+                            '${{ welcome-broker.block_08 }}$',
+                            '#',
+                            '${{ welcome-broker.block_09 }}$',
+                            'https://fsms.quadcode.com/storage/public/d5/sq/h0fvhhgea139ujn0/arrows-horizontal.png',
+                            'https://fsms.quadcode.com/storage/public/d5/sq/h00ggnfnh4cs76vg/arrow-topbot.png'
+                        )
    
                         p.gray-text.pt24.pb24 ${{ welcome-broker.block_10 }}$
 
@@ -193,7 +213,7 @@ table.row.brad-full.color-bg(style="border: 4px solid #1A1D1E;")
 
 .h-12 &nbsp;
 
-+vml-bg('https://fsms.quadcode.com/storage/public/d5/sq/h08ggnfnh4cs770g/welcome-bottom-img.png', '#101314', 580, 240)
+mixin bottom-hero-content()
     table.row.brad-full.bg-img-bottom(style="border: 4px solid #FF5500;")
         tr
             td.wrapper.last.offset-by-one
@@ -208,6 +228,21 @@ table.row.brad-full.color-bg(style="border: 4px solid #1A1D1E;")
                                     tr
                                         td.butt.pb0
                                             a.butt-link(href="https://api.trade.iqbroker.com/v1/multi-links/deposit?aff=7&afftrack=mail_welcome&retrack=mail_welcome" universal="true" target="_blank") ${{ welcome-broker.block_25 }}$
+
++vml-bg('https://fsms.quadcode.com/storage/public/d5/sq/h08ggnfnh4cs770g/welcome-bottom-img.png', '#101314', 580, 240)
+    +bottom-hero-content()
+
+.h-24 &nbsp;
+table.row
+    tr
+        td.wrapper.last.offset-by-one
+            table.ten.columns
+                tr
+                    td.text-pad-small.pb0
+                        p.demo-note Fixed VML background example
+
++vml-bg-fixed('https://fsms.quadcode.com/storage/public/d5/sq/h08ggnfnh4cs770g/welcome-bottom-img.png', '#101314', 580, 240)
+    +bottom-hero-content()
 
 table.row
     tr

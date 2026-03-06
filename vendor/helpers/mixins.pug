@@ -233,6 +233,50 @@ mixin vml-bg(imageUrl, bgColor, width, height)
                 | </v:rect>
                 | <![endif]-->
 
+//- Safer VML background helper example.
+//- Main difference from vml-bg above:
+//- the Outlook conditional markup is emitted as a raw interpolated string,
+//- so width/height/src/color are resolved before HTML output.
+mixin vml-bg-fixed(imageUrl, bgColor, width, height)
+    table(width=width, cellpadding="0", cellspacing="0", border="0", style=`width:${width}px; background:${bgColor}; background-image:url('${imageUrl}'); background-repeat:no-repeat; background-position:center; background-size:cover;`)
+        tr
+            td(style=`width:${width}px; height:${height}px;`)
+                != `<!--[if gte mso 9]><v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:${width}px;height:${height}px;"><v:fill type="frame" src="${imageUrl}" color="${bgColor}" /><v:textbox inset="0,0,0,0"><![endif]-->`
+                block
+                != `<!--[if gte mso 9]></v:textbox></v:rect><![endif]-->`
+
+mixin cta-two-column-table(leftHref, leftText, rightHref, rightText)
+    table.w100(role="presentation")
+        tr
+            td.demo-cta-col.demo-cta-pad-right(style="vertical-align: top;")
+                table(align="left" style="width: 100%;")
+                    tr
+                        td.butt.pb0
+                            a.butt-link(href=leftHref, universal="true", target="_blank") #{leftText}
+            td.demo-cta-col.demo-cta-pad-left(style="vertical-align: top;")
+                table(align="left" style="width: 100%;")
+                    tr
+                        td.butt.butt-2.pb0
+                            a.butt-link-2(href=rightHref, universal="true", target="_blank") #{rightText}
+
+mixin cta-switch-table(leftHref, leftText, rightHref, rightText, desktopArrowSrc, mobileArrowSrc)
+    table.w100(role="presentation")
+        tr
+            td.demo-switch-col.demo-switch-pad-right(style="vertical-align: middle;")
+                table(align="left" style="width: 100%;")
+                    tr
+                        td.butt.butt-small.pb0
+                            a.butt-link-middle(href=leftHref, universal="true", target="_blank") #{leftText}
+            td.demo-switch-arrow-desktop(align="center", style="vertical-align: middle;")
+                img.demo-switch-arrow-desktop-img(src=desktopArrowSrc)
+            td.demo-switch-arrow-mobile(align="center", style="display:none; mso-hide:all; max-height:0; overflow:hidden; vertical-align: middle;")
+                img.demo-switch-arrow-mobile-img(src=mobileArrowSrc)
+            td.demo-switch-col.demo-switch-pad-left(style="vertical-align: middle;")
+                table(align="left" style="width: 100%;")
+                    tr
+                        td.butt.butt-small.pb0
+                            a.butt-link-middle(href=rightHref, universal="true", target="_blank") #{rightText}
+
 
 
 
